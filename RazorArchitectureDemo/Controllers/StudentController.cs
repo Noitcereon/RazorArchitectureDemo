@@ -81,7 +81,7 @@ namespace RazorArchitectureDemo.Controllers
             else
             {
                 // Image upload handling
-                string uniqueFileName = $"{Guid.NewGuid()}_{student.ImageFile.FileName}";
+                string uniqueFileName = $"{Guid.NewGuid()}";
                 string imageFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
                 string filePath = Path.Combine(imageFolder, uniqueFileName);
                 using FileStream fs = new FileStream(filePath, FileMode.Create);
@@ -107,30 +107,28 @@ namespace RazorArchitectureDemo.Controllers
 
         public IActionResult EditStudent(Student student)
         {
+            if (!ModelState.IsValid) return EditStudentPage(student.Id);
+
             // TODO: make the image upload work. Right now it doesn't reach the else, because ImageFile is always null.
-            if (ModelState.IsValid)
+            // Checks if a new file has been uploaded
+            if (student.ImageFile == null)
             {
-                // Checks if a new file has been uploaded
-                if (student.ImageFile == null)
-                {
-                    student.ImageFileName = _studentRepo.Get(student.Id).ImageFileName;
-                }
-                else
-                {
-                    // Image upload handling
-                    string uniqueFileName = $"{Guid.NewGuid()}_{student.ImageFile.FileName}";
-                    string imageFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
-                    string filePath = Path.Combine(imageFolder, uniqueFileName);
-                    using FileStream fs = new FileStream(filePath, FileMode.Create);
-
-                    student.ImageFile.CopyTo(fs);
-                    student.ImageFileName = uniqueFileName;
-                }
-                _studentRepo.Update(student.Id, student);
-                return RedirectToAction(nameof(ShowStudents));
+                student.ImageFileName = _studentRepo.Get(student.Id).ImageFileName;
             }
+            else
+            {
+                // Image upload handling
+                string uniqueFileName = $"{Guid.NewGuid()}";
+                string imageFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
+                string filePath = Path.Combine(imageFolder, uniqueFileName);
+                using FileStream fs = new FileStream(filePath, FileMode.Create);
 
-            return EditStudentPage(student.Id);
+                student.ImageFile.CopyTo(fs);
+                student.ImageFileName = uniqueFileName;
+            }
+            _studentRepo.Update(student.Id, student);
+            return RedirectToAction(nameof(ShowStudents));
+
         }
 
         public IActionResult DeleteStudent(int id)
