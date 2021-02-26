@@ -10,6 +10,7 @@
 
 <a class="btn btn-primary" asp-action="CreateStudent">Create Student</a>
 <!-- Page navigation -->
+<!-- all the asp-route-x refer to the parameters in the StudentController (and the action you call, eg. StudentController.ShowStudents) -->
 <a asp-action="ShowStudents"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PaginatedStudents.PageIndex - 1)"
