@@ -1,0 +1,76 @@
+﻿@model StudentVm
+@{ViewData["Title"] = "Student Page";}
+@{
+    var prevDisabled = !Model.PaginatedStudents.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PaginatedStudents.HasNextPage ? "disabled" : "";
+}
+
+<h1>Show Students</h1>
+<span class="font-weight-bold">Student count:</span> @Model.PaginatedStudents.Count
+
+<a class="btn btn-primary" asp-action="CreateStudent">Create Student</a>
+<!-- Page navigation -->
+<a asp-action="ShowStudents"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PaginatedStudents.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="ShowStudents"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PaginatedStudents.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+<!-- Page navigation END -->
+<form asp-action="ShowStudents" asp-controller="Student" method="get">
+    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+    <button type="submit" class="btn btn-dark">Search</button>
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th><a asp-action="ShowStudents" asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a></th>
+        <th>Email</th>
+        <th>Profession</th>
+        <th>Image</th>
+        <th>Action</th>
+    </tr>
+    @foreach (Student s in @Model.PaginatedStudents)
+    {
+        string imagePath = "/images/" + s.ImageFileName;
+
+        <tr>
+            <td>@s.Id</td>
+            <td>@s.Name</td>
+            <td>@s.Email</td>
+            <td>@s.Profession</td>
+            <td><img src="@imagePath" alt="image-of-student.jpg" /></td>
+            <td>
+                <a class="btn btn-primary" asp-action="EditStudentPage" asp-route-id="@s.Id"><i class="fa fa-pencil">Edit</i></a>
+                <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-id="@s.Id" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash">Delete</i></a>
+            </td>
+        </tr>
+    }
+</table>
+
+
+<!-- Page navigation -->
+<a asp-action="ShowStudents"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PaginatedStudents.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="ShowStudents"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PaginatedStudents.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+<!-- Page navigation END -->
