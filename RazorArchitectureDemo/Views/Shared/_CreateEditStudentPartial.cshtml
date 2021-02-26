@@ -15,7 +15,7 @@
 </div>
 <div class="form-group">
     <label asp-for="@Model.Profession"></label>
-    <select class="form-control" asp-for="@Model.Profession" asp-items="@Html.GetEnumSelectList(typeof(Profession))">
+    <select class="form-control" asp-for="@Model.Profession" asp-items="@Html.GetEnumSelectList(typeof(Profession))"> <!-- Writes out all the enum types in the option list-->
         <option selected>Select a profession</option>
     </select>
     <span asp-validation-for="Profession" class="text-danger"></span>
