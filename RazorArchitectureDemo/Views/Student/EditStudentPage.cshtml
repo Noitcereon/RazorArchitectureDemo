@@ -2,29 +2,10 @@
 
 <h1>Edit student page</h1>
 <form method="post" asp-action="EditStudent" asp-controller="Student">
-    <input type="hidden" asp-for="@Model.Id"/>
-    <div class="form-group">
-        <label asp-for="@Model.Name"></label>
-        <input class="form-control" type="text" asp-for="@Model.Name"/>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Email"></label>
-        <input class="form-control" type="text" asp-for="@Model.Email"/>
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Profession"></label>
-        <select class="form-control" asp-for="@Model.Profession" asp-items="@Html.GetEnumSelectList(typeof(Profession))">
-            <option selected>Select a profession</option>
-        </select>
-        <span asp-validation-for="Profession" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.ImageFileName"></label>
-        <input class="form-control-file" type="file" asp-for="@Model.ImageFileName"/>
-        <span asp-validation-for="ImageFileName" class="text-danger"></span>
-    </div>
+    <input type="hidden" asp-for="@Model.Id" />
+    <!--The Partial is to make the code more DRY (reuse of code).
+        You can also pass a model along in the parameter to the partial (in case of e.g. foreach) --> 
+    @await Html.PartialAsync("_CreateEditStudentPartial")
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Save changes</button>
     </div>

@@ -1,0 +1,27 @@
+﻿@model Student
+
+@* This is a Partial View. It is a form of component to reduce repetition of code.
+    Similar to the Partial View  is the 'View Component'. 'View Component' is a more powerful version of Partial View, for more advanced use cases.
+    Such as show Login-Logout info based on a login state. *@
+<div class="form-group">
+    <label asp-for="@Model.Name"></label>
+    <input class="form-control" type="text" asp-for="@Model.Name" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="@Model.Email"></label>
+    <input class="form-control" type="text" asp-for="@Model.Email" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="@Model.Profession"></label>
+    <select class="form-control" asp-for="@Model.Profession" asp-items="@Html.GetEnumSelectList(typeof(Profession))">
+        <option selected>Select a profession</option>
+    </select>
+    <span asp-validation-for="Profession" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="@Model.ImageFile">Upload photo of the student</label>
+    <input class="form-control-file" asp-for="@Model.ImageFile" />
+    <span asp-validation-for="ImageFile" class="text-danger"></span>
+</div>

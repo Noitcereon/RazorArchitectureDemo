@@ -4,28 +4,10 @@
 
 
 <form method="post" asp-action="CreateStudent" asp-controller="Student" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="@Model.Name"></label>
-        <input class="form-control" type="text" asp-for="@Model.Name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Email"></label>
-        <input class="form-control" type="text" asp-for="@Model.Email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Profession"></label>
-        <select class="form-control" asp-for="@Model.Profession" asp-items="@Html.GetEnumSelectList(typeof(Profession))">
-            <option selected>Select a profession</option>
-        </select>
-        <span asp-validation-for="Profession" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.ImageFile">Upload photo of the student</label>
-        <input class="form-control-file" asp-for="@Model.ImageFile" />
-        <span asp-validation-for="ImageFile" class="text-danger"></span>
-    </div>
+
+    <!--The Partial is to make the code more DRY (reuse of code).
+    You can also pass a model along in the parameter to the partial (in case of e.g. foreach) --> 
+    @await Html.PartialAsync("_CreateEditStudentPartial")
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Create</button>
     </div>

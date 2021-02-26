@@ -71,6 +71,7 @@ namespace RazorArchitectureDemo.Controllers
 
         public IActionResult CreateStudent(Student student)
         {
+            // ModelState.IsValid checks the Models validation attributes such as [Required]. In this case the Student Model.
             if (!ModelState.IsValid) return View(nameof(CreateStudentPage));
 
             if (student.ImageFile == null)
@@ -79,6 +80,7 @@ namespace RazorArchitectureDemo.Controllers
             }
             else
             {
+                // Image upload handling
                 string uniqueFileName = $"{Guid.NewGuid()}_{student.ImageFile.FileName}";
                 string imageFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
                 string filePath = Path.Combine(imageFolder, uniqueFileName);
@@ -105,11 +107,24 @@ namespace RazorArchitectureDemo.Controllers
 
         public IActionResult EditStudent(Student student)
         {
+            // TODO: make the image upload work. Right now it doesn't reach the else, because ImageFile is always null.
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrWhiteSpace(student.ImageFileName))
+                // Checks if a new file has been uploaded
+                if (student.ImageFile == null)
                 {
                     student.ImageFileName = _studentRepo.Get(student.Id).ImageFileName;
+                }
+                else
+                {
+                    // Image upload handling
+                    string uniqueFileName = $"{Guid.NewGuid()}_{student.ImageFile.FileName}";
+                    string imageFolder = Path.Combine(_webHostEnv.WebRootPath, "images");
+                    string filePath = Path.Combine(imageFolder, uniqueFileName);
+                    using FileStream fs = new FileStream(filePath, FileMode.Create);
+
+                    student.ImageFile.CopyTo(fs);
+                    student.ImageFileName = uniqueFileName;
                 }
                 _studentRepo.Update(student.Id, student);
                 return RedirectToAction(nameof(ShowStudents));
